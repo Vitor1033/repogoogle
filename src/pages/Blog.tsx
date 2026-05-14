@@ -3,12 +3,17 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card'
 import { Button } from '../components/ui/Button';
 import { ArrowRight, Clock, User } from 'lucide-react';
 import { BLOG_POSTS } from '../data/cms';
+import { SEO } from '../components/SEO';
 
 export const Blog = () => {
   const posts = BLOG_POSTS;
 
   return (
     <div className="flex flex-col flex-1 bg-white">
+      <SEO 
+        title="Blog & Insights" 
+        description="Expert advice, comprehensive guides, and real student experiences to help you navigate your international journey."
+      />
       {/* Header */}
       <section className="bg-slate-50 py-24 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

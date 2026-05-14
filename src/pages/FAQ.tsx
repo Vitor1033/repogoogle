@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { motion } from 'motion/react';
+import { SEO } from '../components/SEO';
 
 const faqs = [
   {
@@ -39,6 +40,10 @@ export const FAQ = () => {
 
   return (
     <div className="flex flex-col flex-1 bg-slate-50 pb-24">
+      <SEO 
+        title="FAQ" 
+        description="Find answers to frequently asked questions about European Era, our services, and specific programs."
+      />
       <section className="bg-slate-900 text-white py-24 border-b border-slate-800">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">Frequently Asked Questions</h1>

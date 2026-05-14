@@ -1,10 +1,15 @@
 import React from 'react';
 import { Button } from '../components/ui/Button';
 import { GraduationCap, Building2, Plane, Home, ShieldCheck, Handshake } from 'lucide-react';
+import { SEO } from '../components/SEO';
 
 export const Services = () => {
   return (
     <div className="flex flex-col flex-1">
+      <SEO 
+        title="Services" 
+        description="Comprehensive end-to-end solutions for students and host organizations to ensure a seamless international mobility experience."
+      />
       {/* Header */}
       <section className="bg-slate-50 py-20 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

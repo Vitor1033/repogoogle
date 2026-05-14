@@ -7,6 +7,7 @@ import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { MapPin, Calendar, Euro, Heart, UserCircle, Bell, Trash2 } from 'lucide-react';
 import { Link, Navigate } from 'react-router-dom';
+import { SEO } from '../components/SEO';
 
 export const Dashboard = () => {
   const { user, loading: authLoading } = useAuth();
@@ -29,6 +30,10 @@ export const Dashboard = () => {
 
   return (
     <div className="flex flex-col flex-1 bg-slate-50 min-h-screen pt-24 pb-12">
+      <SEO 
+        title="Dashboard" 
+        description="Manage your saved opportunities and subscriptions on European Era."
+      />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 w-full">
         <h1 className="text-3xl font-bold text-slate-900 mb-8">My Dashboard</h1>
         

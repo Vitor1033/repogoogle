@@ -1,10 +1,15 @@
 import React from 'react';
 import { Button } from '../components/ui/Button';
 import { Card, CardContent } from '../components/ui/Card';
+import { SEO } from '../components/SEO';
 
 export const Partners = () => {
   return (
     <div className="flex flex-col flex-1">
+      <SEO 
+        title="Our Partners" 
+        description="European Era bridges the gap between educational institutions and the corporate world."
+      />
       <section className="bg-slate-900 py-24 border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">Our Partner Network</h1>

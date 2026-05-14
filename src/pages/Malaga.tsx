@@ -4,10 +4,15 @@ import { Button } from '../components/ui/Button';
 import { MapPin, Sun, Palette, Compass } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import MalagaImage1 from '../assets/images/regenerated_image_1778681745239.png';
+import { SEO } from '../components/SEO';
 
 export const Malaga = () => {
   return (
     <div className="min-h-screen">
+      <SEO 
+        title="Malaga" 
+        description="Capital of the Costa del Sol and the perfect destination for your international mobility experience."
+      />
       {/* Hero Section */}
       <section className="bg-slate-900 text-white py-24 md:py-32 relative overflow-hidden">
         <img src="https://images.unsplash.com/photo-1549556899-73e0c034b074?auto=format&fit=crop&q=80" alt="View of Malaga" className="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-overlay" />

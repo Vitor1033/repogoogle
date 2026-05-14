@@ -6,10 +6,15 @@ import RicardImage from '../assets/images/regenerated_image_1778681183667.png';
 import AnaImage from '../assets/images/regenerated_image_1778681184643.png';
 import FrancescaImage from '../assets/images/regenerated_image_1778681185811.png';
 import HelenaImage from '../assets/images/regenerated_image_1778681186560.png';
+import { SEO } from '../components/SEO';
 
 export const About = () => {
   return (
     <div className="flex flex-col flex-1">
+      <SEO 
+        title="About Us" 
+        description="Learn about European Era's mission to shape the future of mobility and create life-changing experiences for young professionals."
+      />
       {/* Header */}
       <section className="bg-slate-900 text-white py-24 md:py-32 relative overflow-hidden">
         <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80" alt="Team meeting" className="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-overlay" />

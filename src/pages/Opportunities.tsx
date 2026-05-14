@@ -7,6 +7,7 @@ import { OPPORTUNITIES } from '../data/cms';
 import { useAuth } from '../lib/AuthContext';
 import { useFavorites } from '../lib/useFavorites';
 import { useSubscriptions } from '../lib/useSubscriptions';
+import { SEO } from '../components/SEO';
 
 const categories = ["All", "Marketing", "Business", "IT & Tech", "Design", "AI & Innovation", "Remote"];
 
@@ -62,6 +63,10 @@ export const Opportunities = () => {
 
   return (
     <div className="flex flex-col flex-1 bg-slate-50">
+      <SEO 
+        title="Opportunities" 
+        description="Find your next big step. Browse Erasmus+ funded programs and exclusive paid internships across Europe."
+      />
       {/* Header */}
       <div className="bg-white border-b border-slate-200 py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

@@ -6,10 +6,15 @@ import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import HeroImage from '../assets/images/regenerated_image_1778680293282.png';
 import { TESTIMONIALS } from '../data/cms';
+import { SEO } from '../components/SEO';
 
 export const Home = () => {
   return (
     <div className="flex flex-col flex-1">
+      <SEO 
+        title="Home" 
+        description="European Era creates life-changing opportunities for students and professionals across Europe through Erasmus+, internships, and courses."
+      />
       {/* Hero Section */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-0 bg-slate-50">
         <div className="col-span-12 md:col-span-7 flex flex-col justify-center px-6 sm:px-10 lg:px-16 py-12 lg:py-24 xl:py-32">

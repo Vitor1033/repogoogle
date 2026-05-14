@@ -43,6 +43,42 @@ service cloud.firestore {
           && data.createdAt is timestamp;
     }
 
+    function isValidContact(data) {
+      return data.keys().hasAll(['firstName', 'lastName', 'email', 'subject', 'message', 'createdAt'])
+          && data.keys().size() <= 6
+          && data.firstName is string && data.firstName.size() <= 128
+          && data.lastName is string && data.lastName.size() <= 128
+          && data.email is string && data.email.size() <= 256
+          && data.subject is string && data.subject.size() <= 256
+          && data.message is string && data.message.size() <= 5000
+          && data.createdAt is timestamp;
+    }
+
+    function isValidApplication(data) {
+      return data.keys().hasAll(['type', 'firstName', 'lastName', 'email', 'phone', 'organization', 'message', 'createdAt'])
+          && data.keys().size() <= 8
+          && data.type is string && data.type.matches('^(student|company|partner)$')
+          && data.firstName is string && data.firstName.size() <= 128
+          && data.lastName is string && data.lastName.size() <= 128
+          && data.email is string && data.email.size() <= 256
+          && data.phone is string && data.phone.size() <= 64
+          && data.organization is string && data.organization.size() <= 256
+          && data.message is string && data.message.size() <= 5000
+          && data.createdAt is timestamp;
+    }
+
+    match /contacts/{contactId} {
+      allow create: if isValidId(contactId) 
+                    && isValidContact(incoming())
+                    && incoming().createdAt == request.time;
+    }
+
+    match /applications/{applicationId} {
+      allow create: if isValidId(applicationId) 
+                    && isValidApplication(incoming())
+                    && incoming().createdAt == request.time;
+    }
+
     match /users/{userId} {
       allow get: if isVerified() && isValidId(userId) && request.auth.uid == userId;
       

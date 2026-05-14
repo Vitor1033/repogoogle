@@ -1,18 +1,52 @@
 import React, { useState } from 'react';
 import { Button } from '../components/ui/Button';
 import { User, Building2, Landmark, CheckCircle2, Loader2 } from 'lucide-react';
+import { SEO } from '../components/SEO';
+import { db, handleFirestoreError, OperationType } from '../lib/firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 export const Apply = () => {
   const [activeTab, setActiveTab] = useState<'student' | 'company' | 'partner'>('student');
   const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success'>('idle');
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    organization: '',
+    message: ''
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.id]: e.target.value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormStatus('submitting');
-    // MOCK API CALL
-    setTimeout(() => {
+    
+    try {
+      await addDoc(collection(db, 'applications'), {
+        ...formData,
+        type: activeTab,
+        createdAt: serverTimestamp()
+      });
       setFormStatus('success');
-    }, 1500);
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        organization: '',
+        message: ''
+      });
+    } catch (error) {
+      handleFirestoreError(error, OperationType.CREATE, 'applications');
+      setFormStatus('idle'); // Or show error
+    }
   };
 
   const handleTabChange = (tab: 'student' | 'company' | 'partner') => {
@@ -22,6 +56,10 @@ export const Apply = () => {
 
   return (
     <div className="flex flex-col flex-1 bg-slate-50">
+      <SEO 
+        title="Apply" 
+        description="Select your profile and begin the application process for our Erasmus+, internships, and courses."
+      />
       <section className="py-20 text-center px-4 max-w-4xl mx-auto">
         <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">Apply Now</h1>
         <p className="text-xl text-slate-600 mb-10">Select your profile to begin the application process.</p>
@@ -82,35 +120,36 @@ export const Apply = () => {
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-sm font-semibold text-slate-900">First Name</label>
-                    <input required type="text" className="w-full h-12 px-4 rounded-lg border border-slate-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="John"/>
+                    <input id="firstName" value={formData.firstName} onChange={handleChange} required type="text" className="w-full h-12 px-4 rounded-lg border border-slate-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="John"/>
                   </div>
                    <div className="space-y-2">
                     <label className="text-sm font-semibold text-slate-900">Last Name</label>
-                    <input required type="text" className="w-full h-12 px-4 rounded-lg border border-slate-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="Doe"/>
+                    <input id="lastName" value={formData.lastName} onChange={handleChange} required type="text" className="w-full h-12 px-4 rounded-lg border border-slate-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="Doe"/>
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-slate-900">Email Address</label>
-                  <input required type="email" className="w-full h-12 px-4 rounded-lg border border-slate-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="you@example.com"/>
+                  <input id="email" value={formData.email} onChange={handleChange} required type="email" className="w-full h-12 px-4 rounded-lg border border-slate-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="you@example.com"/>
                 </div>
 
                 {activeTab === 'student' && (
                   <>
                     <div className="space-y-2">
                       <label className="text-sm font-semibold text-slate-900">Field of Study</label>
-                      <select required className="w-full h-12 px-4 rounded-lg border border-slate-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all bg-white">
-                        <option>Marketing & Communications</option>
-                        <option>IT & Software Engineering</option>
-                        <option>Business Administration</option>
-                        <option>Design & Creative</option>
-                        <option>Other</option>
+                      <select id="organization" value={formData.organization} onChange={handleChange} required className="w-full h-12 px-4 rounded-lg border border-slate-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all bg-white">
+                        <option value="">Select a field</option>
+                        <option value="Marketing & Communications">Marketing & Communications</option>
+                        <option value="IT & Software Engineering">IT & Software Engineering</option>
+                        <option value="Business Administration">Business Administration</option>
+                        <option value="Design & Creative">Design & Creative</option>
+                        <option value="Other">Other</option>
                       </select>
                     </div>
                      <div className="space-y-2">
                       <label className="text-sm font-semibold text-slate-900">CV / Resume (PDF)</label>
                       <div className="w-full border-2 border-dashed border-slate-300 p-8 text-center rounded-lg hover:bg-slate-50 transition-colors cursor-pointer relative overflow-hidden group">
-                        <input type="file" required className="absolute inset-0 opacity-0 cursor-pointer z-10" />
+                        <input type="file" className="absolute inset-0 opacity-0 cursor-pointer z-10" />
                         <span className="text-primary font-medium group-hover:underline">Click to upload</span> or drag and drop
                       </div>
                     </div>
@@ -121,12 +160,12 @@ export const Apply = () => {
                   <>
                     <div className="space-y-2">
                       <label className="text-sm font-semibold text-slate-900">Company Name</label>
-                      <input required type="text" className="w-full h-12 px-4 rounded-lg border border-slate-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="Acme Corp"/>
+                      <input id="organization" value={formData.organization} onChange={handleChange} required type="text" className="w-full h-12 px-4 rounded-lg border border-slate-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="Acme Corp"/>
                     </div>
                     <div className="grid md:grid-cols-2 gap-6">
                       <div className="space-y-2">
                         <label className="text-sm font-semibold text-slate-900">Industry / Sector</label>
-                        <select required className="w-full h-12 px-4 rounded-lg border border-slate-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all bg-white">
+                        <select className="w-full h-12 px-4 rounded-lg border border-slate-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all bg-white">
                           <option>IT & Software</option>
                           <option>Marketing & Media</option>
                           <option>Hospitality & Tourism</option>
@@ -136,7 +175,7 @@ export const Apply = () => {
                       </div>
                       <div className="space-y-2">
                         <label className="text-sm font-semibold text-slate-900">Interns Needed (Per Year)</label>
-                        <select required className="w-full h-12 px-4 rounded-lg border border-slate-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all bg-white">
+                        <select className="w-full h-12 px-4 rounded-lg border border-slate-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all bg-white">
                           <option>1-5</option>
                           <option>5-10</option>
                           <option>10+</option>
@@ -150,12 +189,12 @@ export const Apply = () => {
                   <>
                     <div className="space-y-2">
                       <label className="text-sm font-semibold text-slate-900">Institution Name</label>
-                      <input required type="text" className="w-full h-12 px-4 rounded-lg border border-slate-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="University of Example"/>
+                      <input id="organization" value={formData.organization} onChange={handleChange} required type="text" className="w-full h-12 px-4 rounded-lg border border-slate-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="University of Example"/>
                     </div>
                     <div className="grid md:grid-cols-2 gap-6">
                       <div className="space-y-2">
                         <label className="text-sm font-semibold text-slate-900">Institution Type</label>
-                        <select required className="w-full h-12 px-4 rounded-lg border border-slate-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all bg-white">
+                        <select className="w-full h-12 px-4 rounded-lg border border-slate-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all bg-white">
                           <option>University</option>
                           <option>VET College</option>
                           <option>Educational Agency</option>
@@ -165,7 +204,7 @@ export const Apply = () => {
                       </div>
                       <div className="space-y-2">
                         <label className="text-sm font-semibold text-slate-900">Students Sent (Per Year)</label>
-                        <select required className="w-full h-12 px-4 rounded-lg border border-slate-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all bg-white">
+                        <select className="w-full h-12 px-4 rounded-lg border border-slate-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all bg-white">
                           <option>1-10</option>
                           <option>10-50</option>
                           <option>50+</option>
@@ -177,7 +216,7 @@ export const Apply = () => {
 
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-slate-900">Additional Information</label>
-                  <textarea className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" rows={4} placeholder="Tell us more about your goals..."></textarea>
+                  <textarea id="message" value={formData.message} onChange={handleChange} className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" rows={4} placeholder="Tell us more about your goals..."></textarea>
                 </div>
 
                 <Button type="submit" disabled={formStatus === 'submitting'} size="lg" className={`w-full h-14 text-lg ${activeTab === 'company' ? 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-200' : activeTab === 'partner' ? 'bg-purple-600 hover:bg-purple-700 shadow-purple-200' : ''}`}>
