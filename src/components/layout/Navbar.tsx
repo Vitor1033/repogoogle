@@ -21,21 +21,21 @@ export const Navbar = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-slate-200 mt-0">
-      <div className="max-w-7xl mx-auto px-4 sm:px-10 py-3 sm:py-4 flex justify-between items-center bg-white">
+      <div className="max-w-7xl mx-auto px-4 lg:px-8 py-3 flex justify-between items-center bg-white">
         {/* Logo */}
-        <div className="flex-shrink-0 flex items-center">
+        <div className="flex-shrink-0 flex items-center md:flex-1 justify-start">
           <Link to="/" className="flex items-center group">
             <Logo className="transition-transform group-hover:scale-105 duration-300" />
           </Link>
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex ml-10 space-x-8">
+        <nav className="hidden md:flex flex-1 justify-center space-x-6 lg:space-x-8">
           {navigation.map((item) => (
             <Link
               key={item.name}
               to={item.href}
-              className="text-sm font-medium text-slate-600 hover:text-primary transition-colors"
+              className="text-sm font-medium text-slate-600 hover:text-primary transition-colors whitespace-nowrap"
             >
               {item.name}
             </Link>
@@ -43,7 +43,7 @@ export const Navbar = () => {
         </nav>
 
         {/* CTA & Actions */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center justify-end gap-3 lg:gap-4 md:flex-1">
           {user ? (
             <>
               <Link to="/dashboard" className="px-5 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 rounded-full transition-all">

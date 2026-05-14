@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '../components/ui/Button';
-import { Mail, MapPin, Phone, Clock, MessageSquare, CheckCircle2 } from 'lucide-react';
+import { Mail, MapPin, Phone, Clock, MessageSquare, CheckCircle2, Loader2 } from 'lucide-react';
 
 export const Contact = () => {
   const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success'>('idle');
@@ -130,7 +130,12 @@ export const Contact = () => {
                     </div>
 
                     <Button type="submit" disabled={formStatus === 'submitting'} size="lg" className="w-full h-14 text-lg">
-                      {formStatus === 'submitting' ? 'Sending...' : 'Send Message'}
+                      {formStatus === 'submitting' ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <Loader2 className="w-5 h-5 animate-spin" />
+                          Sending...
+                        </span>
+                      ) : 'Send Message'}
                     </Button>
                   </form>
                 </>

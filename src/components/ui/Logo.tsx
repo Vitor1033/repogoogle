@@ -4,14 +4,14 @@ export const Logo = ({ className = '' }: { className?: string }) => {
   return (
     <div className={`flex items-center gap-2 sm:gap-3 ${className}`}>
       {/* Text part */}
-      <div className="flex text-[1.25rem] sm:text-[1.5rem] md:text-[1.75rem] font-black tracking-[0.12em] font-sans">
+      <div className="flex text-lg sm:text-xl md:text-2xl font-black tracking-[0.12em] font-sans">
         <span style={{ color: '#394A98' }}>EUROPEAN</span>
         <span style={{ color: '#F1C71B' }}>ERA</span>
       </div>
       
       {/* Emblem part */}
       <svg 
-        className="w-10 h-10 sm:w-12 sm:h-12 md:w-[60px] md:h-[60px] flex-shrink-0" 
+        className="w-8 h-8 md:w-10 md:h-10 flex-shrink-0" 
         viewBox="0 0 60 60" 
         fill="none" 
         xmlns="http://www.w3.org/2000/svg"

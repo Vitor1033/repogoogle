@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '../components/ui/Button';
-import { User, Building2, Landmark, CheckCircle2 } from 'lucide-react';
+import { User, Building2, Landmark, CheckCircle2, Loader2 } from 'lucide-react';
 
 export const Apply = () => {
   const [activeTab, setActiveTab] = useState<'student' | 'company' | 'partner'>('student');
@@ -181,7 +181,12 @@ export const Apply = () => {
                 </div>
 
                 <Button type="submit" disabled={formStatus === 'submitting'} size="lg" className={`w-full h-14 text-lg ${activeTab === 'company' ? 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-200' : activeTab === 'partner' ? 'bg-purple-600 hover:bg-purple-700 shadow-purple-200' : ''}`}>
-                  {formStatus === 'submitting' ? 'Processing...' : 'Submit Application'}
+                  {formStatus === 'submitting' ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Processing...
+                    </span>
+                  ) : 'Submit Application'}
                 </Button>
                 <p className="text-center text-sm text-slate-500 mt-4">By submitting, you agree to our Privacy Policy and Terms & Conditions.</p>
               </form>
