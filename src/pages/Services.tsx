@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '../components/ui/Button';
 import { GraduationCap, Building2, Plane, Home, ShieldCheck, Handshake } from 'lucide-react';
+import universityCampus from '../assets/images/university-campus.png';
 
 export const Services = () => {
   return (
@@ -38,7 +39,7 @@ export const Services = () => {
               <Button href="/opportunities">Explore Erasmus Opportunities</Button>
             </div>
             <div className="w-full md:w-1/2 aspect-video rounded-3xl overflow-hidden shadow-2xl">
-               <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&q=80" alt="University campus" className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700" />
+               <img src={universityCampus} alt="University campus" className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700" />
             </div>
           </div>
 
