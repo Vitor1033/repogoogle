@@ -1,0 +1,37 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile data",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "name": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["email", "name", "createdAt", "updatedAt"]
+    },
+    "Favorite": {
+      "title": "Favorite",
+      "description": "A saved opportunity",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "opportunityId": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["userId", "opportunityId", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "User" },
+      "description": "User profiles"
+    },
+    "/users/{userId}/favorites/{opportunityId}": {
+      "schema": { "$ref": "Favorite" },
+      "description": "User's saved opportunities"
+    }
+  }
+}
