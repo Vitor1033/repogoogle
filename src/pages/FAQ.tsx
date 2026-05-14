@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import * as motion from 'motion/react-client';
+import { motion } from 'motion/react';
 
 const faqs = [
   {

@@ -3,7 +3,7 @@ import { Button } from '../components/ui/Button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '../components/ui/Card';
 import { Globe, Plane, GraduationCap, Building2, MapPin, ArrowRight, CheckCircle2, Quote } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import * as motion from 'motion/react-client';
+import { motion } from 'motion/react';
 import HeroImage from '../assets/images/regenerated_image_1778680293282.png';
 import { TESTIMONIALS } from '../data/cms';
 

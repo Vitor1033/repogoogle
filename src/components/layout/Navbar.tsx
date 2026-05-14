@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '../ui/Button';
 import { Menu, X, Globe, ChevronRight } from 'lucide-react';
 import { useAuth } from '../../lib/AuthContext';
+import { Logo } from '../ui/Logo';
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -23,11 +24,8 @@ export const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-10 py-3 sm:py-4 flex justify-between items-center bg-white">
         {/* Logo */}
         <div className="flex-shrink-0 flex items-center">
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl leading-none pt-0.5">E</span>
-            </div>
-            <span className="font-bold text-xl tracking-tight text-slate-900 group-hover:text-primary transition-colors">European Era</span>
+          <Link to="/" className="flex items-center group">
+            <Logo className="transition-transform group-hover:scale-105 duration-300" />
           </Link>
         </div>
 

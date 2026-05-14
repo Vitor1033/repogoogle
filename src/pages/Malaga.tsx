@@ -1,5 +1,5 @@
 import React from 'react';
-import * as motion from 'motion/react-client';
+import { motion } from 'motion/react';
 import { Button } from '../components/ui/Button';
 import { MapPin, Sun, Palette, Compass } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -119,12 +119,8 @@ export const Malaga = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">Ready to Experience Malaga?</h2>
           <p className="text-xl text-slate-600 mb-8 font-medium">Excellent workplace opportunities are waiting to be explored.</p>
           <div className="flex gap-4 justify-center">
-            <Link to="/opportunities">
-              <Button size="lg" className="rounded-full shadow-lg shadow-primary/20">Explore Opportunities</Button>
-            </Link>
-            <Link to="/contact">
-              <Button size="lg" variant="outline" className="rounded-full">Contact Us</Button>
-            </Link>
+            <Button href="/opportunities" size="lg" className="rounded-full shadow-lg shadow-primary/20">Explore Opportunities</Button>
+            <Button href="/contact" size="lg" variant="outline" className="rounded-full">Contact Us</Button>
           </div>
         </div>
       </section>

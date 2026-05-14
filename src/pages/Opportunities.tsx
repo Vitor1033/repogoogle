@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Button } from '../components/ui/Button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '../components/ui/Card';
-import { MapPin, Search, Filter, Briefcase, Calendar, Euro, Heart } from 'lucide-react';
-import * as motion from 'motion/react-client';
+import { MapPin, Search, Filter, Briefcase, Calendar, Euro, Heart, Bell, Loader2 } from 'lucide-react';
+import { motion } from 'motion/react';
 import { OPPORTUNITIES } from '../data/cms';
 import { useAuth } from '../lib/AuthContext';
 import { useFavorites } from '../lib/useFavorites';
+import { useSubscriptions } from '../lib/useSubscriptions';
 
 const categories = ["All", "Marketing", "Business", "IT & Tech", "Design", "AI & Innovation", "Remote"];
 
@@ -14,6 +15,22 @@ export const Opportunities = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { user, signIn } = useAuth();
   const { favorites, toggleFavorite } = useFavorites();
+  const { addSubscription } = useSubscriptions();
+  const [showSubscribeSuccess, setShowSubscribeSuccess] = useState(false);
+  
+  // Loading states
+  const [isLoadingJobs, setIsLoadingJobs] = useState(true);
+  const [processingFavs, setProcessingFavs] = useState<Record<string, boolean>>({});
+  const [isSubscribing, setIsSubscribing] = useState(false);
+
+  React.useEffect(() => {
+    // Simulate fetching job listings
+    setIsLoadingJobs(true);
+    const timer = setTimeout(() => {
+      setIsLoadingJobs(false);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, []);
 
   const filteredOpps = OPPORTUNITIES.filter(op => {
     const matchesCategory = activeCategory === "All" || op.category === activeCategory;
@@ -21,12 +38,26 @@ export const Opportunities = () => {
     return matchesCategory && matchesSearch;
   });
 
-  const handleFavoriteClick = (jobId: string) => {
+  const handleFavoriteClick = async (jobId: string | number) => {
      if (!user) {
         signIn();
         return;
      }
-     toggleFavorite(jobId);
+     setProcessingFavs(prev => ({ ...prev, [jobId]: true }));
+     await toggleFavorite(jobId);
+     setProcessingFavs(prev => ({ ...prev, [jobId]: false }));
+  };
+
+  const handleSubscribe = async () => {
+    if (!user) {
+      signIn();
+      return;
+    }
+    setIsSubscribing(true);
+    await addSubscription(activeCategory, searchQuery);
+    setIsSubscribing(false);
+    setShowSubscribeSuccess(true);
+    setTimeout(() => setShowSubscribeSuccess(false), 3000);
   };
 
   return (
@@ -95,31 +126,65 @@ export const Opportunities = () => {
 
         {/* Results */}
         <div className="flex-1">
-          <div className="mb-6 flex justify-between items-center pr-2">
+          <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pr-2">
             <p className="text-slate-500 font-medium">Showing {filteredOpps.length} results</p>
+            <div className="flex items-center gap-3">
+               {showSubscribeSuccess && (
+                 <span className="text-emerald-600 text-sm font-medium animate-pulse">Alerts Subscribed!</span>
+               )}
+               <Button variant="outline" onClick={handleSubscribe} disabled={isSubscribing} className="gap-2">
+                 {isSubscribing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Bell className="w-4 h-4" />}
+                 {isSubscribing ? 'Subscribing...' : 'Subscribe to Search'}
+               </Button>
+            </div>
           </div>
 
           <div className="space-y-4">
-            {filteredOpps.map((job) => {
-              const isSaved = favorites[job.id] || false;
-              
-              return (
-              <motion.div
-                key={job.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                <Card className="hover:shadow-md transition-shadow group border-slate-200">
-                  <div className="p-6 flex flex-col md:flex-row gap-6 items-start md:items-center relative">
-                    <button 
-                      onClick={() => handleFavoriteClick(job.id)}
-                      className="absolute top-6 right-6 p-2 rounded-full hover:bg-slate-100 transition-colors"
-                      title={isSaved ? "Remove from saved" : "Save opportunity"}
-                    >
-                      <Heart className={`w-5 h-5 ${isSaved ? 'fill-rose-500 text-rose-500' : 'text-slate-400 hover:text-rose-500'}`} />
-                    </button>
-                    {/* Logo */}
+            {isLoadingJobs ? (
+              // Loading Skeleton
+              Array.from({ length: 4 }).map((_, i) => (
+                <Card key={i} className="border-slate-200">
+                  <div className="p-6 flex flex-col md:flex-row gap-6 items-start md:items-center relative animate-pulse">
+                    <div className="w-16 h-16 rounded-xl bg-slate-200 shrink-0"></div>
+                    <div className="flex-1 space-y-3 w-full">
+                      <div className="h-4 bg-slate-200 rounded w-1/4"></div>
+                      <div className="h-6 bg-slate-200 rounded w-3/4"></div>
+                      <div className="h-4 bg-slate-200 rounded w-1/2"></div>
+                      <div className="flex gap-4 mt-2">
+                         <div className="h-4 bg-slate-200 rounded w-16"></div>
+                         <div className="h-4 bg-slate-200 rounded w-16"></div>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              ))
+            ) : (
+              filteredOpps.map((job) => {
+                const isSaved = favorites[job.id] || false;
+                const isProcessingFav = processingFavs[job.id] || false;
+                
+                return (
+                <motion.div
+                  key={job.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Card className="hover:shadow-md transition-shadow group border-slate-200">
+                    <div className="p-6 flex flex-col md:flex-row gap-6 items-start md:items-center relative">
+                      <button 
+                        onClick={() => handleFavoriteClick(job.id)}
+                        disabled={isProcessingFav}
+                        className="absolute top-6 right-6 p-2 rounded-full hover:bg-slate-100 transition-colors disabled:opacity-50"
+                        title={isSaved ? "Remove from saved" : "Save opportunity"}
+                      >
+                        {isProcessingFav ? (
+                          <Loader2 className="w-5 h-5 text-slate-400 animate-spin" />
+                        ) : (
+                          <Heart className={`w-5 h-5 ${isSaved ? 'fill-rose-500 text-rose-500' : 'text-slate-400 hover:text-rose-500'}`} />
+                        )}
+                      </button>
+                      {/* Logo */}
                     <div className="w-16 h-16 rounded-xl overflow-hidden bg-slate-100 flex items-center justify-center shrink-0 shadow-sm border border-slate-200">
                       <img src={job.logo} alt={job.company} loading="lazy" className="w-full h-full object-cover" />
                     </div>
@@ -162,9 +227,9 @@ export const Opportunities = () => {
                   </div>
                 </Card>
               </motion.div>
-            )})}
+            )}))}
 
-            {filteredOpps.length === 0 && (
+            {!isLoadingJobs && filteredOpps.length === 0 && (
               <div className="text-center py-20 bg-white rounded-xl border border-dashed border-slate-300">
                 <Briefcase className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                 <h3 className="text-lg font-medium text-slate-900 mb-2">No opportunities found</h3>

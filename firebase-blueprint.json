@@ -22,6 +22,18 @@
         "createdAt": { "type": "string" }
       },
       "required": ["userId", "opportunityId", "createdAt"]
+    },
+    "Subscription": {
+      "title": "Subscription",
+      "description": "A user's saved search preference for email alerts",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "category": { "type": "string" },
+        "searchQuery": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["userId", "category", "searchQuery", "createdAt"]
     }
   },
   "firestore": {
@@ -32,6 +44,10 @@
     "/users/{userId}/favorites/{opportunityId}": {
       "schema": { "$ref": "Favorite" },
       "description": "User's saved opportunities"
+    },
+    "/users/{userId}/subscriptions/{subscriptionId}": {
+      "schema": { "$ref": "Subscription" },
+      "description": "User's email alert subscriptions"
     }
   }
 }

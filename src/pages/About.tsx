@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '../components/ui/Button';
-import * as motion from 'motion/react-client';
+import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import RicardImage from '../assets/images/regenerated_image_1778681183667.png';
 import AnaImage from '../assets/images/regenerated_image_1778681184643.png';
@@ -80,9 +80,7 @@ export const About = () => {
         <div className="max-w-3xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-slate-900 mb-6">Want to join our team?</h2>
           <p className="text-xl text-slate-600 mb-8">We are always looking for passionate individuals to help us expand our impact across Europe.</p>
-          <Link to="/contact">
-            <Button size="lg" className="rounded-full">Contact Us</Button>
-          </Link>
+          <Button href="/contact" size="lg" className="rounded-full">Contact Us</Button>
         </div>
       </section>
     </div>

@@ -38,11 +38,12 @@ export function useFavorites() {
     return () => unsubscribe();
   }, [user]);
 
-  const toggleFavorite = async (opportunityId: string) => {
+  const toggleFavorite = async (opportunityId: string | number) => {
     if (!user) return;
-    const ref = doc(db, 'users', user.uid, 'favorites', opportunityId);
+    const strId = String(opportunityId);
+    const ref = doc(db, 'users', user.uid, 'favorites', strId);
     
-    if (favorites[opportunityId]) {
+    if (favorites[strId]) {
       try {
         await deleteDoc(ref);
       } catch (error) {
@@ -52,7 +53,7 @@ export function useFavorites() {
       try {
         await setDoc(ref, {
           userId: user.uid,
-          opportunityId,
+          opportunityId: strId,
           createdAt: serverTimestamp()
         });
       } catch (error) {

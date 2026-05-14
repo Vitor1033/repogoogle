@@ -46,9 +46,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signIn = async () => {
     const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({
+      prompt: 'select_account'
+    });
     try {
       await signInWithPopup(auth, provider);
-    } catch (error) {
+    } catch (error: any) {
+      if (error?.code === 'auth/cancelled-popup-request' || error?.code === 'auth/popup-closed-by-user') {
+        // Safe to ignore, user closed the auth popup
+        return;
+      }
       console.error("Error signing in", error);
     }
   };

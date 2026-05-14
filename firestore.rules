@@ -34,6 +34,15 @@ service cloud.firestore {
           && data.createdAt is timestamp;
     }
 
+    function isValidSubscription(data) {
+      return data.keys().hasAll(['userId', 'category', 'searchQuery', 'createdAt'])
+          && data.keys().size() <= 4
+          && data.userId is string && data.userId.size() <= 128 && data.userId == request.auth.uid
+          && data.category is string && data.category.size() <= 256
+          && data.searchQuery is string && data.searchQuery.size() <= 256
+          && data.createdAt is timestamp;
+    }
+
     match /users/{userId} {
       allow get: if isVerified() && isValidId(userId) && request.auth.uid == userId;
       
@@ -60,6 +69,19 @@ service cloud.firestore {
                       && incoming().createdAt == request.time;
         
         allow delete: if isVerified() && isValidId(userId) && request.auth.uid == userId && isValidId(opportunityId);
+      }
+
+      match /subscriptions/{subscriptionId} {
+        allow get: if isVerified() && isValidId(userId) && request.auth.uid == userId && isValidId(subscriptionId);
+        
+        allow list: if isVerified() && isValidId(userId) && request.auth.uid == userId;
+        
+        allow create: if isVerified() && isValidId(userId) && request.auth.uid == userId && isValidId(subscriptionId)
+                      && isValidSubscription(incoming())
+                      && incoming().userId == request.auth.uid
+                      && incoming().createdAt == request.time;
+        
+        allow delete: if isVerified() && isValidId(userId) && request.auth.uid == userId && isValidId(subscriptionId);
       }
     }
 

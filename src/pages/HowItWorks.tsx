@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '../components/ui/Button';
 import { ClipboardList, Users2, PlaneTakeoff, Rocket } from 'lucide-react';
-import * as motion from 'motion/react-client';
+import { motion } from 'motion/react';
 
 export const HowItWorks = () => {
   const steps = [
